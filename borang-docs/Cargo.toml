@@ -9,3 +9,5 @@ leptos_meta = { version = "0.8" }
 leptos_router = { version = "0.8" }
 leptos-use = { version = "0.16" }
 console_error_panic_hook = "0.1.7"
+
+borang = { path = "../borang" }
