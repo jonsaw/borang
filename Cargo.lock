@@ -131,11 +131,15 @@ dependencies = [
 [[package]]
 name = "borang"
 version = "0.1.0"
+dependencies = [
+ "leptos",
+]
 
 [[package]]
 name = "borang-docs"
 version = "0.1.0"
 dependencies = [
+ "borang",
  "console_error_panic_hook",
  "leptos",
  "leptos-use",
