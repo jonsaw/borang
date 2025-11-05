@@ -9,9 +9,7 @@ where
 {
     provide_context(field);
 
-    view! {
-        {children()}
-    }
+    view! { {children()} }
 }
 
 #[component]
@@ -19,11 +17,7 @@ pub fn FieldError() -> impl IntoView {
     let field = expect_context::<ValidatedField<String>>();
     let error_message = field.error_message();
 
-    view! {
-        <div class="error">
-            {error_message}
-        </div>
-    }
+    view! { <div>{error_message}</div> }
 }
 
 #[component]
@@ -33,9 +27,5 @@ where
 {
     let error_message = field.error_message();
 
-    view! {
-        <div class="error">
-            {error_message}
-        </div>
-    }
+    view! { <div>{error_message}</div> }
 }
