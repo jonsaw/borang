@@ -244,7 +244,7 @@ where
 
             if form.should_show_error(&field_name) {
                 form.get_field_error(&field_name)
-                    .map(|error| error.message.clone())
+                    .map(|error| error.message())
             } else {
                 None
             }
@@ -252,15 +252,37 @@ where
     }
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Clone)]
 pub struct ValidationError {
     pub field: String,
-    pub message: String,
+    message_fn: Arc<dyn Fn() -> String + Send + Sync>,
+}
+
+impl ValidationError {
+    pub fn new(field: String, message_fn: impl Fn() -> String + Send + Sync + 'static) -> Self {
+        Self {
+            field,
+            message_fn: Arc::new(message_fn),
+        }
+    }
+
+    pub fn message(&self) -> String {
+        (self.message_fn)()
+    }
+}
+
+impl std::fmt::Debug for ValidationError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("ValidationError")
+            .field("field", &self.field)
+            .field("message", &self.message())
+            .finish()
+    }
 }
 
 impl Display for ValidationError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.message)
+        write!(f, "{}", self.message())
     }
 }
 

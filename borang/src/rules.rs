@@ -1,26 +1,40 @@
 use crate::{ValidationError, ValidationResult, ValidationRule};
 
-pub struct WithMessage<T: Send + Sync, R: ValidationRule<T>> {
+pub struct WithMessage<
+    T: Send + Sync,
+    R: ValidationRule<T>,
+    F: Fn(ValidationError) -> String + Clone + Send + Sync + 'static,
+> {
     rule: R,
-    message: String,
+    message_fn: F,
     _phantom: std::marker::PhantomData<T>,
 }
 
-impl<T: Send + Sync, R: ValidationRule<T>> WithMessage<T, R> {
-    pub fn new(rule: R, message: impl Into<String>) -> Self {
+impl<
+    T: Send + Sync,
+    R: ValidationRule<T>,
+    F: Fn(ValidationError) -> String + Clone + Send + Sync + 'static,
+> WithMessage<T, R, F>
+{
+    pub fn new(rule: R, message_fn: F) -> Self {
         Self {
             rule,
-            message: message.into(),
+            message_fn,
             _phantom: std::marker::PhantomData,
         }
     }
 }
 
-impl<T: Send + Sync, R: ValidationRule<T>> ValidationRule<T> for WithMessage<T, R> {
+impl<
+    T: Send + Sync,
+    R: ValidationRule<T>,
+    F: Fn(ValidationError) -> String + Clone + Send + Sync + 'static,
+> ValidationRule<T> for WithMessage<T, R, F>
+{
     fn validate(&self, field_name: &str, value: &T) -> ValidationResult {
-        self.rule.validate(field_name, value).map_err(|mut err| {
-            err.message = self.message.clone();
-            err
+        let message_fn = self.message_fn.clone();
+        self.rule.validate(field_name, value).map_err(|err| {
+            ValidationError::new(field_name.to_string(), move || message_fn(err.clone()))
         })
     }
 }
@@ -58,10 +72,9 @@ pub struct Required;
 impl ValidationRule<String> for Required {
     fn validate(&self, field_name: &str, value: &String) -> ValidationResult {
         if value.trim().is_empty() {
-            Err(ValidationError {
-                field: field_name.to_string(),
-                message: "is required".to_string(),
-            })
+            Err(ValidationError::new(field_name.to_string(), || {
+                "is required".to_string()
+            }))
         } else {
             Ok(())
         }
