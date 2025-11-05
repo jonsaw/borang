@@ -80,3 +80,62 @@ impl ValidationRule<String> for Required {
         }
     }
 }
+
+pub struct Email;
+
+impl ValidationRule<String> for Email {
+    fn validate(&self, field_name: &str, value: &String) -> ValidationResult {
+        let regex = regex::Regex::new(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$").unwrap();
+
+        if !regex.is_match(value) {
+            Err(ValidationError::new(field_name.to_string(), || {
+                "is not a valid email".to_string()
+            }))
+        } else {
+            Ok(())
+        }
+    }
+}
+
+pub struct Length {
+    min: Option<usize>,
+    max: Option<usize>,
+}
+
+impl Length {
+    pub fn min(min: usize) -> Self {
+        Self {
+            min: Some(min),
+            max: None,
+        }
+    }
+
+    pub fn max(mut self, max: usize) -> Self {
+        self.max = Some(max);
+        self
+    }
+}
+
+impl ValidationRule<String> for Length {
+    fn validate(&self, field_name: &str, value: &String) -> ValidationResult {
+        let len = value.chars().count();
+
+        if let Some(min) = self.min {
+            if len < min {
+                return Err(ValidationError::new(field_name.to_string(), move || {
+                    format!("must be at least {} characters", min)
+                }));
+            }
+        }
+
+        if let Some(max) = self.max {
+            if len > max {
+                return Err(ValidationError::new(field_name.to_string(), move || {
+                    format!("must be at most {} characters", max)
+                }));
+            }
+        }
+
+        Ok(())
+    }
+}
