@@ -8,6 +8,15 @@ leptos = { version = "0.8", features = ["csr"] }
 leptos_meta = { version = "0.8" }
 leptos_router = { version = "0.8" }
 leptos-use = { version = "0.16" }
+leptos_i18n = { git = "https://github.com/Baptistemontan/leptos_i18n", features = ["csr"], branch = "next" }
+leptos_i18n_router = { git = "https://github.com/Baptistemontan/leptos_i18n", branch = "next" }
 console_error_panic_hook = "0.1.7"
 
 borang = { path = "../borang" }
+
+[build-dependencies]
+leptos_i18n_build = { git = "https://github.com/Baptistemontan/leptos_i18n", branch = "next", features = ["csr", "pretty_print"] }
+
+[package.metadata.leptos-i18n]
+default = "en"
+locales = ["en", "ms"]

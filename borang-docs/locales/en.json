@@ -1,0 +1,9 @@
+{
+  "form": "Form",
+  "name": "Name",
+  "email": "Email",
+  "submit": "Submit",
+  "item_is_required": "{{item}} is required",
+  "item_is_not_valid": "{{item}} is not valid",
+  "item_must_be_between": "{{item}} must be between {{min}} and {{max}}"
+}

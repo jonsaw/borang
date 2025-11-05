@@ -1,0 +1,9 @@
+{
+  "form": "Borang",
+  "name": "Nama",
+  "email": "Emel",
+  "submit": "Hantar",
+  "item_is_required": "{{item}} diperlukan",
+  "item_is_not_valid": "{{item}} tidak sah",
+  "item_must_be_between": "{{item}} mesti antara {{min}} dan {{max}}"
+}
