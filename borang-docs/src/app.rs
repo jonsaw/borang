@@ -50,7 +50,7 @@ pub fn Example() -> impl IntoView {
             .add(WithMessage::new(Required, move |_err| {
                 t_string!(i18n, item_is_required, item = t_string!(i18n, name)).to_string()
             }))
-            .add(WithMessage::new(Length::min(2).max(100), move |_err| {
+            .add(WithMessage::new(Length::min(2).max(100), move |_| {
                 t_string!(
                     i18n,
                     item_must_be_between,
@@ -67,7 +67,7 @@ pub fn Example() -> impl IntoView {
             .add(WithMessage::new(Required, move |_err| {
                 t_string!(i18n, item_is_required, item = t_string!(i18n, email)).to_string()
             }))
-            .add(WithMessage::new(Email, move |_err| {
+            .add(WithMessage::new(Email, move |_| {
                 t_string!(i18n, item_is_not_valid, item = t_string!(i18n, email)).to_string()
             })),
     );
