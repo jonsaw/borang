@@ -16,6 +16,7 @@ use leptos::prelude::*;
 pub struct UseFormValidation {
     pub form: RwSignal<FormValidation>,
     validate_trigger: RwSignal<u32>,
+    touch_trigger: RwSignal<u32>,
     field_count: RwSignal<usize>,
 }
 
@@ -24,6 +25,7 @@ impl UseFormValidation {
         Self {
             form: RwSignal::new(FormValidation::new()),
             validate_trigger: RwSignal::new(0),
+            touch_trigger: RwSignal::new(0),
             field_count: RwSignal::new(0),
         }
     }
@@ -36,22 +38,38 @@ impl UseFormValidation {
 
         self.field_count.update(|count| *count += 1);
 
-        let field_clone = field.clone();
         let validate_trigger = self.validate_trigger;
+        let touch_trigger = self.touch_trigger;
 
-        Effect::new(move |prev_trigger: Option<u32>| {
-            let current_trigger = validate_trigger.get();
+        {
+            let field = field.clone();
+            Effect::new(move |prev_trigger: Option<u32>| {
+                let current_trigger = validate_trigger.get();
 
-            if let Some(prev) = prev_trigger {
-                if current_trigger != prev {
-                    field_clone.validate();
-                    field_clone.mark_touched();
+                if let Some(prev) = prev_trigger {
+                    if current_trigger != prev {
+                        field.validate();
+                    }
                 }
-            }
 
-            current_trigger
-        });
+                current_trigger
+            });
+        }
 
+        {
+            let field = field.clone();
+            Effect::new(move |prev_trigger| {
+                let current_trigger = touch_trigger.get();
+
+                if let Some(prev) = prev_trigger {
+                    if current_trigger != prev {
+                        field.mark_touched();
+                    }
+                }
+
+                current_trigger
+            });
+        }
         field
     }
 }
