@@ -47,7 +47,7 @@ pub fn Example() -> impl IntoView {
 
     let name = form.field("name", String::new()).with_validator(
         Rules::new()
-            .add(WithMessage::new(Required, move |_err| {
+            .add(WithMessage::new(Required, move |_| {
                 t_string!(i18n, item_is_required, item = t_string!(i18n, name)).to_string()
             }))
             .add(WithMessage::new(Length::min(2).max(100), move |_| {
@@ -64,7 +64,7 @@ pub fn Example() -> impl IntoView {
 
     let email = form.field("email", String::new()).with_validator(
         Rules::new()
-            .add(WithMessage::new(Required, move |_err| {
+            .add(WithMessage::new(Required, move |_| {
                 t_string!(i18n, item_is_required, item = t_string!(i18n, email)).to_string()
             }))
             .add(WithMessage::new(Email, move |_| {
