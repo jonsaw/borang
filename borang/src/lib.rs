@@ -72,6 +72,38 @@ impl UseFormValidation {
         }
         field
     }
+
+    pub fn is_dirty(&self) -> bool {
+        self.form
+            .get_untracked()
+            .fields
+            .iter()
+            .any(|(_, field)| field.is_dirty)
+    }
+
+    pub fn is_touched(&self) -> bool {
+        self.form
+            .get_untracked()
+            .fields
+            .iter()
+            .any(|(_, field)| field.is_touched)
+    }
+
+    /// Validates all registered fields by triggering the validation signal
+    pub fn validate_all_fields(&self) -> bool {
+        // Increment the trigger to cause all fields to validate
+        self.validate_trigger.update(|val| *val += 1);
+
+        let is_valid = self.form.get_untracked().is_valid;
+
+        // Return the validation result
+        is_valid
+    }
+
+    /// Touches all registered fields by triggering the touch signal
+    pub fn touch_all_fields(&self) {
+        self.touch_trigger.update(|val| *val += 1);
+    }
 }
 
 #[derive(Debug, Clone)]
