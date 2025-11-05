@@ -1,10 +1,8 @@
 pub mod field;
-pub mod form;
 pub mod input;
 pub mod rules;
 
 pub use field::{Field, FieldError, FieldErrorFor};
-pub use form::Form;
 pub use input::Input;
 pub use rules::WithMessage;
 
