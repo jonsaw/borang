@@ -8,6 +8,7 @@ pub fn Input() -> impl IntoView {
 
     view! {
         <input
+            value=move || field.value.get()
             on:input={
                 let field = field.clone();
                 move |ev| {
