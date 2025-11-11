@@ -2,6 +2,11 @@ mod app;
 
 use app::*;
 use leptos::prelude::*;
+
+pub mod components;
+pub mod pages;
+pub mod utils;
+
 include!(concat!(env!("OUT_DIR"), "/i18n/mod.rs"));
 
 fn main() {

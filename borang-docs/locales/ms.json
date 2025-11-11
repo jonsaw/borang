@@ -2,8 +2,27 @@
   "form": "Borang",
   "name": "Nama",
   "email": "Emel",
+  "age": "Umur",
+  "country": "Negara",
   "submit": "Hantar",
   "item_is_required": "{{item}} diperlukan",
   "item_is_not_valid": "{{item}} tidak sah",
-  "item_must_be_between": "{{item}} mesti antara {{min}} dan {{max}}"
+  "item_must_be_between": "{{item}} mesti antara {{min}} dan {{max}}",
+  "item_must_be_at_least": "{{item}} mesti sekurang-kurangnya {{min}}",
+  "item_must_be_at_most": "{{item}} mesti paling banyak {{max}}",
+  "item_must_be_at_least_chars": "{{item}} mesti sekurang-kurangnya {{min}} aksara",
+  "item_must_be_at_most_chars": "{{item}} mesti paling banyak {{max}} aksara",
+  "item_must_be_valid_type": "{{item}} mesti {{value_type}} yang sah",
+  "invalid_country": "Negara tidak sah (pilih selain Other)",
+  "type_number": "nombor",
+  "type_email": "emel",
+  "type_boolean": "boolean",
+  "theme_light": "Tema terang",
+  "theme_dark": "Tema gelap",
+  "theme_system": "Tema sistem",
+  "intro": {
+    "title": "Selamat datang",
+    "description": "Librari pengesahan borang web untuk Leptos."
+  },
+  "example_here": "Sini adalah contoh:"
 }
