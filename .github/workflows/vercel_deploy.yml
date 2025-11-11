@@ -1,0 +1,72 @@
+name: Release to Vercel
+
+on:
+  push:
+    branches:
+      - main
+env:
+  CARGO_TERM_COLOR: always
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+jobs:
+  build-and-deploy:
+    name: Build and Deploy to Production
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: git-checkout
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install dependencies
+        run: make install
+
+      - name: Install JS packages dependencies
+        run: make jspackages-install
+
+      - name: Build JS packages
+        run: make jspackages-build
+
+      - uses: dtolnay/rust-toolchain@nightly
+        with:
+          components: clippy, rustfmt
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Check formatting
+        run: cargo fmt --check
+
+      - name: Run clippy
+        run: cargo clippy -- -D warnings
+
+      - name: Run tests
+        run: cargo test
+
+      - name: Setup Rust target
+        run: rustup target add wasm32-unknown-unknown
+
+      - name: Download and install Trunk binary
+        run: wget -qO- https://github.com/trunk-rs/trunk/releases/download/v0.21.7/trunk-x86_64-unknown-linux-gnu.tar.gz | tar -xzf-
+
+      - name: Build with Trunk
+        run: ./trunk build --release
+
+      - name: Copy vercel.json to dist
+        run: cp ./vercel.json ./dist/vercel.json
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy to Vercel
+        id: deployment
+        working-directory: ./dist
+        run: |
+          DEPLOYMENT_URL=$(vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }})
+          echo "Deployed to Production: $DEPLOYMENT_URL"
+          echo "## 🚀 Production Deployment Complete!" >> $GITHUB_STEP_SUMMARY
+          echo "**URL**: $DEPLOYMENT_URL" >> $GITHUB_STEP_SUMMARY
