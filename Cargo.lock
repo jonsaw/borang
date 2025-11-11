@@ -135,6 +135,18 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "72b3254f16251a8381aa12e40e3c4d2f0199f8c6508fbecb9d91f575e0fbb8c6"
 
 [[package]]
+name = "biji-ui"
+version = "0.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0c07795d2eb94d45af16447e71f58b95cc8327fbf76fb3008339abe722c0ce67"
+dependencies = [
+ "leptos",
+ "leptos-use",
+ "wasm-bindgen",
+ "web-sys",
+]
+
+[[package]]
 name = "bitflags"
 version = "2.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -153,6 +165,7 @@ dependencies = [
 name = "borang"
 version = "0.1.0"
 dependencies = [
+ "borang-macros",
  "leptos",
  "regex",
 ]
@@ -161,8 +174,10 @@ dependencies = [
 name = "borang-docs"
 version = "0.1.0"
 dependencies = [
+ "biji-ui",
  "borang",
  "console_error_panic_hook",
+ "jspackages",
  "leptos",
  "leptos-use",
  "leptos_i18n",
@@ -170,6 +185,17 @@ dependencies = [
  "leptos_i18n_router",
  "leptos_meta",
  "leptos_router",
+ "regex",
+]
+
+[[package]]
+name = "borang-macros"
+version = "0.1.0"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "regex",
+ "syn",
 ]
 
 [[package]]
@@ -1578,6 +1604,14 @@ dependencies = [
  "pest",
  "pest_derive",
  "serde",
+]
+
+[[package]]
+name = "jspackages"
+version = "0.1.0"
+dependencies = [
+ "wasm-bindgen",
+ "web-sys",
 ]
 
 [[package]]

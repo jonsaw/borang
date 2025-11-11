@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["borang", "borang-docs"]
+members = ["borang", "borang-macros", "borang-docs", "jspackages"]
 
 [workspace.package]
 version = "0.1.0"
