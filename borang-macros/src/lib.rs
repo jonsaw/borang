@@ -223,10 +223,10 @@ fn parse_validator(meta: &Meta) -> syn::Result<Validator> {
                         }
                     }
 
-                    return Err(syn::Error::new_spanned(
+                    Err(syn::Error::new_spanned(
                         &list.tokens,
                         "custom validator parameter must be a string literal (e.g., custom(\"method_name\"))",
-                    ));
+                    ))
                 }
 
                 name => Err(syn::Error::new_spanned(

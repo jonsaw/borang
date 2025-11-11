@@ -104,7 +104,6 @@ where
 
     // Create mark_touched callback
     let mark_touched = {
-        let state = state.clone();
         let name = name.to_string();
         Arc::new(move || {
             state.update(|s| {
@@ -115,21 +114,18 @@ where
 
     // Create reactive error signal for this field
     let error = Signal::derive({
-        let state = state.clone();
         let name = name.to_string();
         move || state.get().errors.get(&name).cloned()
     });
 
     // Create reactive dirty signal for this field
     let dirty = Signal::derive({
-        let state = state.clone();
         let name = name.to_string();
         move || state.get().is_field_dirty(&name)
     });
 
     // Create reactive touched signal for this field
     let touched = Signal::derive({
-        let state = state.clone();
         let name = name.to_string();
         move || state.get().is_field_touched(&name)
     });

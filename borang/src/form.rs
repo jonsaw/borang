@@ -19,7 +19,7 @@ pub struct FormComponentState {
 }
 
 /// Internal form state that stores individual field signals
-#[derive(Clone)]
+#[derive(Clone, Default)]
 pub struct FormState {
     /// Individual field signals - each field manages its own reactive state
     pub fields: HashMap<String, FieldSignal>,
@@ -52,9 +52,7 @@ impl FormState {
             .clone();
 
         // Store initial value if not already stored
-        self.initial_values
-            .entry(name.to_string())
-            .or_insert_with(String::new);
+        self.initial_values.entry(name.to_string()).or_default();
 
         field
     }
@@ -267,6 +265,12 @@ impl<T: FormValidation + Default + Clone + Send + Sync + 'static> Form<T> {
                 }
             });
         }
+    }
+}
+
+impl<T: FormValidation + Default + Clone + Send + Sync + 'static> Default for Form<T> {
+    fn default() -> Self {
+        Self::new()
     }
 }
 
