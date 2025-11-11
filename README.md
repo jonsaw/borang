@@ -10,6 +10,8 @@ Install Borang using Cargo:
 cargo add borang
 ```
 
+See [demo](https://borang-vercel.vercel.app/).
+
 ## Basic Usage
 
 Simple example:
