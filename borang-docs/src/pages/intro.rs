@@ -230,18 +230,13 @@ pub fn IntroPage() -> impl IntoView {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Default, Clone, Debug)]
 enum Country {
     Malaysia,
     Australia,
     England,
+    #[default]
     Other,
-}
-
-impl Default for Country {
-    fn default() -> Self {
-        Country::Other
-    }
 }
 
 impl FromFieldValue for Country {
@@ -296,7 +291,7 @@ pub fn FieldError(
         move || {
             state
                 .get_error()
-                .map(|e| translate_validation_error(i18n, &e, &field_name.get()))
+                .map(|e| translate_validation_error(i18n, &e, field_name.get()))
         }
     };
 
