@@ -10,7 +10,7 @@ Install Borang using Cargo:
 cargo add borang
 ```
 
-See [demo](https://borang-vercel.vercel.app/).
+See [demo](https://borang-leptos.vercel.app).
 
 ## Basic Usage
 
