@@ -1,8 +1,8 @@
 use proc_macro::TokenStream;
 use quote::quote;
 use syn::{
-    Data, DeriveInput, Expr, ExprLit, Field, Fields, Lit, Meta, Token, parse::Parse,
-    parse::ParseStream, parse_macro_input,
+    parse::Parse, parse::ParseStream, parse_macro_input, Data, DeriveInput, Expr, ExprLit, Field,
+    Fields, Lit, Meta, Token,
 };
 
 /// Internal representation of a validator and its parameters

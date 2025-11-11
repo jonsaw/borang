@@ -1,5 +1,5 @@
 use leptos::{portal::Portal, prelude::*};
-use leptos_use::{ColorMode, UseColorModeOptions, UseColorModeReturn, use_color_mode_with_options};
+use leptos_use::{use_color_mode_with_options, ColorMode, UseColorModeOptions, UseColorModeReturn};
 
 use crate::{
     components::{icons, menu},

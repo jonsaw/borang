@@ -1,6 +1,6 @@
 use jspackages::shiki::code_to_html;
 use leptos::prelude::*;
-use leptos_use::{ColorMode, UseColorModeReturn, use_color_mode};
+use leptos_use::{use_color_mode, ColorMode, UseColorModeReturn};
 
 use crate::utils::align_indentation;
 
