@@ -2,6 +2,10 @@
 name = "borang-macros"
 version = "0.1.0"
 edition = "2021"
+description = "Borang is a Leptos library for building web forms with validation."
+license = "MIT"
+readme = "../README.md"
+repository = "https://github.com/jonsaw/borang"
 
 [lib]
 proc-macro = true
