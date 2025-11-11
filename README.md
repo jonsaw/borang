@@ -1,6 +1,6 @@
 # Borang
 
-Borang is a Leptos library for building web forms with validation and error handling.
+Borang is a Leptos library for building web forms with validation.
 
 ## Getting Started
 
@@ -15,49 +15,79 @@ cargo add borang
 Simple example:
 
 ```rust
-use borang::{
-    Field, FieldErrorFor, Input, UseFormValidation,
-    rules::{Email, Required, Rules},
-};
+use borang::{Form, FormComponent, Field};
 use leptos::prelude::*;
 
-#[component]
-fn Form() -> impl IntoView {
-    let form = UseFormValidation::new();
+#[derive(Clone)]
+struct ContactForm {
+    #[validator(required)]
+    name: String,
 
-    let name = form.field("name", String::new()).with_validator(Required);
-    let email = form
-        .field("email", String::new())
-        .with_validator(Rules::new().add(Required).add(Email));
+    #[validator(required, email)]
+    email: String,
+}
+
+#[component]
+fn App() -> impl IntoView {
+    let contact = ContactForm {
+        name: String::new(),
+        email: String::new(),
+    };
+
+    let form = Form::from(contact);
+
+    let on_submit = {
+        let form = form.clone();
+        move |event: leptos::web_sys::SubmitEvent| {
+            event.prevent_default();
+            if form.validate() {
+                let data = form.data();
+                leptos::logging::log!("Name: {}", data.name);
+                leptos::logging::log!("Email: {}", data.email);
+            }
+        }
+    };
 
     view! {
-        <form on:submit={
-            let form = form.clone();
-            move |event| {
-                event.prevent_default();
-                form.touch_all_fields();
-                form.validate_all_fields();
-            }
-        }>
-            <Field field=name.clone()>
-                <label for="name">"Name"</label>
-                <Input attr:id="name" attr:placeholder="Jed Saw" />
-                <FieldErrorFor field=name.clone() />
+        <form on:submit=on_submit>
+            <FormComponent form=form>
+                <Field<ContactForm, _, _> name="name" let(value, set_value, state)>
+                    <label for="name">"Name"</label>
+                    <input
+                        id="name"
+                        type="text"
+                        placeholder="Jed Saw"
+                        bind:value=(value, set_value)
+                        on:blur={
+                            let state = state.clone();
+                            move |_| (state.mark_touched)()
+                        }
+                    />
+                </Field<ContactForm, _, _>>
 
-            </Field>
-            <Field field=email.clone()>
-                <label for="email">"Email"</label>
-                <Input attr:id="email" attr:placeholder="jed@borang.com" />
-                <FieldErrorFor field=email.clone() />
-            </Field>
-            <button type="submit">Submit</button>
+                <Field<ContactForm, _, _> name="email" let(value, set_value, state)>
+                    <label for="email">"Email"</label>
+                    <input
+                        id="email"
+                        type="email"
+                        placeholder="jed@borang.com"
+                        bind:value=(value, set_value)
+                        on:blur={
+                            let state = state.clone();
+                            move |_| (state.mark_touched)()
+                        }
+                    />
+                </Field<ContactForm, _, _>>
+
+                <button type="submit">"Submit"</button>
+            </FormComponent>
         </form>
     }
 }
 
 fn main() {
     mount_to_body(|| {
-        view! { <Form /> }
+        view! { <App /> }
     })
 }
 ```
