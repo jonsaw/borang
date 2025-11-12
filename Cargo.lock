@@ -163,7 +163,7 @@ dependencies = [
 
 [[package]]
 name = "borang"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "borang-macros",
  "leptos",
@@ -172,7 +172,7 @@ dependencies = [
 
 [[package]]
 name = "borang-docs"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "biji-ui",
  "borang",
@@ -190,7 +190,7 @@ dependencies = [
 
 [[package]]
 name = "borang-macros"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1608,7 +1608,7 @@ dependencies = [
 
 [[package]]
 name = "jspackages"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "wasm-bindgen",
  "web-sys",
