@@ -17,10 +17,10 @@ See [demo](https://borang-leptos.vercel.app).
 Simple example:
 
 ```rust
-use borang::{Form, FormComponent, Field};
+use borang::{Form, FormComponent, Field, Validation};
 use leptos::prelude::*;
 
-#[derive(Clone)]
+#[derive(Validation, Default, Clone)]
 struct ContactForm {
     #[validator(required)]
     name: String,
@@ -53,7 +53,7 @@ fn App() -> impl IntoView {
     view! {
         <form on:submit=on_submit>
             <FormComponent form=form>
-                <Field<ContactForm, _, _> name="name" let(value, set_value, state)>
+                <Field form=form name="name" let(value, set_value, state)>
                     <label for="name">"Name"</label>
                     <input
                         id="name"
@@ -65,9 +65,9 @@ fn App() -> impl IntoView {
                             move |_| (state.mark_touched)()
                         }
                     />
-                </Field<ContactForm, _, _>>
+                </Field>
 
-                <Field<ContactForm, _, _> name="email" let(value, set_value, state)>
+                <Field form=form name="email" let(value, set_value, state)>
                     <label for="email">"Email"</label>
                     <input
                         id="email"
@@ -79,7 +79,7 @@ fn App() -> impl IntoView {
                             move |_| (state.mark_touched)()
                         }
                     />
-                </Field<ContactForm, _, _>>
+                </Field>
 
                 <button type="submit">"Submit"</button>
             </FormComponent>
