@@ -97,6 +97,10 @@ pub struct Form<T: FormValidation> {
     form_data: RwSignal<T>,
 }
 
+// Manually implement Copy for Form<T> regardless of whether T is Copy
+// This is safe because Form only contains Copy types (RwSignal is always Copy)
+impl<T: FormValidation + Clone> Copy for Form<T> {}
+
 impl<T: FormValidation + Default + Clone + Send + Sync + 'static> Form<T> {
     pub fn new() -> Self {
         Self {
@@ -294,16 +298,12 @@ where
     IV: IntoView,
 {
     // Provide form context to children
-    provide_context(form.clone());
+    provide_context(form);
 
     // Create derived signals for form values and errors
-    let form_values = Signal::derive({
-        let form = form.clone();
-        move || form.values()
-    });
+    let form_values = Signal::derive(move || form.values());
 
     let form_errors = Signal::derive({
-        let form = form.clone();
         move || {
             let state = form.state_signal().get();
             state.errors.clone()
@@ -312,7 +312,6 @@ where
 
     // Create derived signal for form dirty state
     let form_dirty = Signal::derive({
-        let form = form.clone();
         move || {
             let state = form.state_signal().get();
             state.is_form_dirty()
@@ -321,7 +320,6 @@ where
 
     // Create derived signal for form touched state
     let form_touched = Signal::derive({
-        let form = form.clone();
         move || {
             let state = form.state_signal().get();
             state.is_form_touched()
@@ -330,7 +328,6 @@ where
 
     // Create derived signal for form valid state
     let form_valid = Signal::derive({
-        let form = form.clone();
         move || {
             let state = form.state_signal().get();
             state.errors.is_empty()

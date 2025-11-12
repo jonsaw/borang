@@ -55,21 +55,18 @@ impl FieldState {
 /// ```
 #[component]
 pub fn Field<T, F, IV>(
+    /// Form instance to register the field with
+    form: Form<T>,
     /// The name of the field (must match a field in the form struct)
     name: &'static str,
     /// Children function that receives (value, set_value, state)
     children: F,
-    /// Phantom data to use the type parameter T
-    #[prop(default = std::marker::PhantomData)]
-    _phantom: std::marker::PhantomData<T>,
 ) -> impl IntoView
 where
     T: FormValidation + Default + Clone + Send + Sync + 'static,
     F: Fn(Signal<String>, WriteSignal<String>, FieldState) -> IV + 'static,
     IV: IntoView,
 {
-    // Get form from context
-    let form = expect_context::<Form<T>>();
     let state = form.state_signal();
 
     // Register field with form state (get or create the field signal)
@@ -87,7 +84,6 @@ where
     // Set up an effect to handle reactive validation when value changes
     // This enables immediate validation feedback as users type
     {
-        let form = form.clone();
         let name = name.to_string();
         let field_signal = field_signal.clone();
 
@@ -158,21 +154,18 @@ where
 /// ```
 #[component]
 pub fn GetField<T, F, IV>(
+    /// The form instance to which this field belongs
+    form: Form<T>,
     /// The name of the field (must match a field in the form struct)
     name: &'static str,
     /// Children function that receives (value)
     children: F,
-    /// Phantom data to use the type parameter T
-    #[prop(default = std::marker::PhantomData)]
-    _phantom: std::marker::PhantomData<T>,
 ) -> impl IntoView
 where
     T: FormValidation + Default + Clone + Send + Sync + 'static,
     F: Fn(Signal<String>) -> IV + 'static,
     IV: IntoView,
 {
-    // Get form from context
-    let form = expect_context::<Form<T>>();
     let state = form.state_signal();
 
     // Register field with form state (get or create the field signal)

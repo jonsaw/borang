@@ -82,7 +82,6 @@ pub fn IntroPage() -> impl IntoView {
         let form = Form::from(contact);
 
         let on_submit = {
-            let form = form.clone();
             move |event: leptos::web_sys::SubmitEvent| {
                 event.prevent_default();
                 if form.validate() {
@@ -98,7 +97,7 @@ pub fn IntroPage() -> impl IntoView {
         view! {
             <form on:submit=on_submit>
                 <FormComponent form=form let:form_state>
-                    <Field<ContactForm, _, _> name="name" let(value, set_value, state)>
+                    <Field name="name" let(value, set_value, state)>
                         <label for="name">"Name"</label>
                         <input
                             id="name"
@@ -121,9 +120,9 @@ pub fn IntroPage() -> impl IntoView {
                                 }
                             </span>
                         </Show>
-                    </Field<ContactForm, _, _>>
+                    </Field>
 
-                    <Field<ContactForm, _, _> name="email" let(value, set_value, state)>
+                    <Field name="email" let(value, set_value, state)>
                         <label for="email">"Email"</label>
                         <input
                             id="email"
@@ -146,9 +145,9 @@ pub fn IntroPage() -> impl IntoView {
                                 }
                             </span>
                         </Show>
-                    </Field<ContactForm, _, _>>
+                    </Field>
 
-                    <Field<ContactForm, _, _> name="age" let(value, set_value, state)>
+                    <Field name="age" let(value, set_value, state)>
                         <label for="age">"Age"</label>
                         <input
                             id="age"
@@ -171,9 +170,9 @@ pub fn IntroPage() -> impl IntoView {
                                 }
                             </span>
                         </Show>
-                    </Field<ContactForm, _, _>>
+                    </Field>
 
-                    <Field<ContactForm, _, _> name="country" let(value, set_value, state)>
+                    <Field name="country" let(value, set_value, state)>
                         <label for="country">"Country"</label>
                         <select
                             id="country"
@@ -199,7 +198,7 @@ pub fn IntroPage() -> impl IntoView {
                                 }
                             </span>
                         </Show>
-                    </Field<ContactForm, _, _>>
+                    </Field>
 
                     <div>
                         <p>"Form valid: " {move || form_state.valid.get().to_string()}</p>
@@ -318,7 +317,6 @@ fn ExampleForm() -> impl IntoView {
     let form = Form::from(contact);
 
     let on_submit = {
-        let form = form.clone();
         move |event: leptos::web_sys::SubmitEvent| {
             event.prevent_default();
             if form.validate() {
@@ -334,7 +332,7 @@ fn ExampleForm() -> impl IntoView {
     view! {
         <form on:submit=on_submit>
             <FormComponent form=form let(form_state: FormComponentState)>
-                <Field<ContactForm, _, _> name="name" let(value, set_value, state)>
+                <Field form=form name="name" let(value, set_value, state)>
                     <div class="mb-4">
                         <label for="name" class="block mb-2 text-sm font-medium">
                             {t!(i18n, name)}
@@ -359,9 +357,9 @@ fn ExampleForm() -> impl IntoView {
                             field_name=Signal::derive(move || t_string!(i18n, name))
                         />
                     </div>
-                </Field<ContactForm, _, _>>
+                </Field>
 
-                <Field<ContactForm, _, _> name="email" let(value, set_value, state)>
+                <Field form=form name="email" let(value, set_value, state)>
                     <div class="mb-4">
                         <label for="email" class="block mb-2 text-sm font-medium">
                             {t!(i18n, email)}
@@ -386,9 +384,9 @@ fn ExampleForm() -> impl IntoView {
                             field_name=Signal::derive(move || t_string!(i18n, email))
                         />
                     </div>
-                </Field<ContactForm, _, _>>
+                </Field>
 
-                <Field<ContactForm, _, _> name="age" let(value, set_value, state)>
+                <Field form=form name="age" let(value, set_value, state)>
                     <div class="mb-4">
                         <label for="age" class="block mb-2 text-sm font-medium">
                             {t!(i18n, age)}
@@ -413,9 +411,9 @@ fn ExampleForm() -> impl IntoView {
                             field_name=Signal::derive(move || t_string!(i18n, age))
                         />
                     </div>
-                </Field<ContactForm, _, _>>
+                </Field>
 
-                <Field<ContactForm, _, _> name="country" let(value, set_value, state)>
+                <Field form=form name="country" let(value, set_value, state)>
                     <div class="mb-4">
                         <label for="country" class="block mb-2 text-sm font-medium">
                             {t!(i18n, country)}
@@ -443,7 +441,7 @@ fn ExampleForm() -> impl IntoView {
                             field_name=Signal::derive(move || t_string!(i18n, country))
                         />
                     </div>
-                </Field<ContactForm, _, _>>
+                </Field>
 
                 <div class="p-4 mt-6 mb-4 space-y-0.5 rounded-md border bg-muted/50 border-border">
                     <p class="font-mono text-sm">
@@ -475,30 +473,30 @@ fn ExampleForm() -> impl IntoView {
                 </div>
 
                 <div class="p-4 mt-6 mb-4 space-y-0.5 rounded-md border bg-muted/50 border-border">
-                    <GetField<ContactForm, _, _> name="name" let(value)>
+                    <GetField form=form name="name" let(value)>
                         <p class="font-mono text-sm">
                             <span class="font-semibold">"Name: "</span>
                             <span>{move || value.get()}</span>
                         </p>
-                    </GetField<ContactForm, _, _>>
-                    <GetField<ContactForm, _, _> name="email" let(value)>
+                    </GetField>
+                    <GetField form=form name="email" let(value)>
                         <p class="font-mono text-sm">
                             <span class="font-semibold">"Email: "</span>
                             <span>{move || value.get()}</span>
                         </p>
-                    </GetField<ContactForm, _, _>>
-                    <GetField<ContactForm, _, _> name="age" let(value)>
+                    </GetField>
+                    <GetField form=form name="age" let(value)>
                         <p class="font-mono text-sm">
                             <span class="font-semibold">"Age: "</span>
                             <span>{move || value.get()}</span>
                         </p>
-                    </GetField<ContactForm, _, _>>
-                    <GetField<ContactForm, _, _> name="country" let(value)>
+                    </GetField>
+                    <GetField form=form name="country" let(value)>
                         <p class="font-mono text-sm">
                             <span class="font-semibold">"Country: "</span>
                             <span>{move || value.get()}</span>
                         </p>
-                    </GetField<ContactForm, _, _>>
+                    </GetField>
                 </div>
 
                 <button
