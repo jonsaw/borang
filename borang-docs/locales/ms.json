@@ -20,6 +20,12 @@
   "theme_light": "Tema terang",
   "theme_dark": "Tema gelap",
   "theme_system": "Tema sistem",
+  "menu": {
+    "intro": "Pendahuluan",
+    "get_started": "Mula di sini",
+    "documentation": "Dokumentasi",
+    "report_an_issue": "Laporkan masalah"
+  },
   "intro": {
     "title": "Selamat datang",
     "description": "Librari pengesahan borang web untuk Leptos."

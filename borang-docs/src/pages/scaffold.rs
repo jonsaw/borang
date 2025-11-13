@@ -157,7 +157,7 @@ pub fn SidebarNav(#[prop(into, optional)] class: String) -> impl IntoView {
     let i18n = use_i18n();
     let location = use_location();
 
-    let introduction = [("/docs/intro", move || t_string!(i18n, intro.title))];
+    let introduction = [("/docs/intro", move || t_string!(i18n, menu.get_started))];
 
     let dialog_ctx = use_context::<DialogContext>();
 
@@ -169,7 +169,7 @@ pub fn SidebarNav(#[prop(into, optional)] class: String) -> impl IntoView {
                         class="block flex py-1 text-sm transition text-foreground-600 hover:text-foreground-900"
                         href="https://docs.rs/borang/latest/borang/"
                     >
-                        "Documentation"
+                        {t!(i18n, menu.documentation)}
                     </a>
                 </li>
                 <li class="md:hidden">
@@ -185,14 +185,14 @@ pub fn SidebarNav(#[prop(into, optional)] class: String) -> impl IntoView {
                         class="block flex py-1 text-sm transition text-foreground-600 hover:text-foreground-900"
                         href="https://github.com/jonsaw/borang/issues"
                     >
-                        "Report an issue"
+                        {t!(i18n, menu.report_an_issue)}
                     </a>
                 </li>
             </ul>
             <ul role="list">
                 <li class="relative mt-6 md:mt-0">
                     <h2 class="text-xs font-semibold dark:text-white text-zinc-900">
-                        "Introduction"
+                        {t!(i18n, menu.intro)}
                     </h2>
                     <ul class="border-l border-transparent">
                         {introduction

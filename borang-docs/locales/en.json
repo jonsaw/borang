@@ -20,6 +20,12 @@
   "theme_light": "Light",
   "theme_dark": "Dark",
   "theme_system": "System",
+  "menu": {
+    "intro": "Introduction",
+    "get_started": "Getting Started",
+    "documentation": "Documentation",
+    "report_an_issue": "Report an Issue"
+  },
   "intro": {
     "title": "Introduction",
     "description": "Borang is a Leptos library for building web forms with validation."
