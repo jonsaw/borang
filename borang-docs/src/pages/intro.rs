@@ -97,7 +97,7 @@ pub fn IntroPage() -> impl IntoView {
         view! {
             <form on:submit=on_submit>
                 <FormComponent form=form let:form_state>
-                    <Field name="name" let(value, set_value, state)>
+                    <Field form=form name="name" let(value, set_value, state)>
                         <label for="name">"Name"</label>
                         <input
                             id="name"
@@ -122,7 +122,7 @@ pub fn IntroPage() -> impl IntoView {
                         </Show>
                     </Field>
 
-                    <Field name="email" let(value, set_value, state)>
+                    <Field form=form name="email" let(value, set_value, state)>
                         <label for="email">"Email"</label>
                         <input
                             id="email"
@@ -147,7 +147,7 @@ pub fn IntroPage() -> impl IntoView {
                         </Show>
                     </Field>
 
-                    <Field name="age" let(value, set_value, state)>
+                    <Field form=form name="age" let(value, set_value, state)>
                         <label for="age">"Age"</label>
                         <input
                             id="age"
@@ -172,7 +172,7 @@ pub fn IntroPage() -> impl IntoView {
                         </Show>
                     </Field>
 
-                    <Field name="country" let(value, set_value, state)>
+                    <Field form=form name="country" let(value, set_value, state)>
                         <label for="country">"Country"</label>
                         <select
                             id="country"
