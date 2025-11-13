@@ -476,25 +476,25 @@ fn ExampleForm() -> impl IntoView {
                     <GetField form=form name="name" let(value)>
                         <p class="font-mono text-sm">
                             <span class="font-semibold">"Name: "</span>
-                            <span>{move || value.get()}</span>
+                            <span>{value}</span>
                         </p>
                     </GetField>
                     <GetField form=form name="email" let(value)>
                         <p class="font-mono text-sm">
                             <span class="font-semibold">"Email: "</span>
-                            <span>{move || value.get()}</span>
+                            <span>{value}</span>
                         </p>
                     </GetField>
                     <GetField form=form name="age" let(value)>
                         <p class="font-mono text-sm">
                             <span class="font-semibold">"Age: "</span>
-                            <span>{move || value.get()}</span>
+                            <span>{value}</span>
                         </p>
                     </GetField>
                     <GetField form=form name="country" let(value)>
                         <p class="font-mono text-sm">
                             <span class="font-semibold">"Country: "</span>
-                            <span>{move || value.get()}</span>
+                            <span>{value}</span>
                         </p>
                     </GetField>
                 </div>
