@@ -97,13 +97,13 @@ pub fn IntroPage() -> impl IntoView {
         view! {
             <form on:submit=on_submit>
                 <FormComponent form=form let:form_state>
-                    <Field form=form name="name" let(value, set_value, state)>
+                    <Field form=form name="name" let(value, state)>
                         <label for="name">"Name"</label>
                         <input
                             id="name"
                             type="text"
                             placeholder="Jed Saw"
-                            bind:value=(value, set_value)
+                            bind:value=value
                             on:blur={
                                 let mark_touched = state.mark_touched.clone();
                                 move |_| mark_touched()
@@ -122,13 +122,13 @@ pub fn IntroPage() -> impl IntoView {
                         </Show>
                     </Field>
 
-                    <Field form=form name="email" let(value, set_value, state)>
+                    <Field form=form name="email" let(value, state)>
                         <label for="email">"Email"</label>
                         <input
                             id="email"
                             type="email"
                             placeholder="jed@borang.com"
-                            bind:value=(value, set_value)
+                            bind:value=value
                             on:blur={
                                 let mark_touched = state.mark_touched.clone();
                                 move |_| mark_touched()
@@ -147,13 +147,13 @@ pub fn IntroPage() -> impl IntoView {
                         </Show>
                     </Field>
 
-                    <Field form=form name="age" let(value, set_value, state)>
+                    <Field form=form name="age" let(value, state)>
                         <label for="age">"Age"</label>
                         <input
                             id="age"
                             type="number"
                             placeholder="18"
-                            bind:value=(value, set_value)
+                            bind:value=value
                             on:blur={
                                 let mark_touched = state.mark_touched.clone();
                                 move |_| mark_touched()
@@ -172,11 +172,11 @@ pub fn IntroPage() -> impl IntoView {
                         </Show>
                     </Field>
 
-                    <Field form=form name="country" let(value, set_value, state)>
+                    <Field form=form name="country" let(value, state)>
                         <label for="country">"Country"</label>
                         <select
                             id="country"
-                            bind:value=(value, set_value)
+                            bind:value=value
                             on:blur={
                                 let mark_touched = state.mark_touched.clone();
                                 move |_| mark_touched()
@@ -332,7 +332,7 @@ fn ExampleForm() -> impl IntoView {
     view! {
         <form on:submit=on_submit>
             <FormComponent form=form let(form_state: FormComponentState)>
-                <Field form=form name="name" let(value, set_value, state)>
+                <Field form=form name="name" let(value, state)>
                     <div class="mb-4">
                         <label for="name" class="block mb-2 text-sm font-medium">
                             {t!(i18n, name)}
@@ -346,7 +346,7 @@ fn ExampleForm() -> impl IntoView {
                                 let state = state.clone();
                                 move || state.has_error()
                             }
-                            bind:value=(value, set_value)
+                            bind:value=value
                             on:blur={
                                 let state = state.clone();
                                 move |_| (state.mark_touched)()
@@ -359,7 +359,7 @@ fn ExampleForm() -> impl IntoView {
                     </div>
                 </Field>
 
-                <Field form=form name="email" let(value, set_value, state)>
+                <Field form=form name="email" let(value, state)>
                     <div class="mb-4">
                         <label for="email" class="block mb-2 text-sm font-medium">
                             {t!(i18n, email)}
@@ -373,7 +373,7 @@ fn ExampleForm() -> impl IntoView {
                                 let state = state.clone();
                                 move || state.has_error()
                             }
-                            bind:value=(value, set_value)
+                            bind:value=value
                             on:blur={
                                 let state = state.clone();
                                 move |_| (state.mark_touched)()
@@ -386,7 +386,7 @@ fn ExampleForm() -> impl IntoView {
                     </div>
                 </Field>
 
-                <Field form=form name="age" let(value, set_value, state)>
+                <Field form=form name="age" let(value, state)>
                     <div class="mb-4">
                         <label for="age" class="block mb-2 text-sm font-medium">
                             {t!(i18n, age)}
@@ -400,7 +400,7 @@ fn ExampleForm() -> impl IntoView {
                                 let state = state.clone();
                                 move || state.has_error()
                             }
-                            bind:value=(value, set_value)
+                            bind:value=value
                             on:blur={
                                 let state = state.clone();
                                 move |_| (state.mark_touched)()
@@ -413,7 +413,7 @@ fn ExampleForm() -> impl IntoView {
                     </div>
                 </Field>
 
-                <Field form=form name="country" let(value, set_value, state)>
+                <Field form=form name="country" let(value, state)>
                     <div class="mb-4">
                         <label for="country" class="block mb-2 text-sm font-medium">
                             {t!(i18n, country)}
@@ -425,7 +425,7 @@ fn ExampleForm() -> impl IntoView {
                                 let state = state.clone();
                                 move || state.has_error()
                             }
-                            bind:value=(value, set_value)
+                            bind:value=value
                             on:blur={
                                 let state = state.clone();
                                 move |_| (state.mark_touched)()

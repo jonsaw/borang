@@ -64,22 +64,13 @@ pub fn Field<T, F, IV>(
 ) -> impl IntoView
 where
     T: FormValidation + Default + Clone + Send + Sync + 'static,
-    F: Fn(Signal<String>, WriteSignal<String>, FieldState) -> IV + 'static,
+    F: Fn(RwSignal<String>, FieldState) -> IV + 'static,
     IV: IntoView,
 {
     let state = form.state_signal();
 
     // Register field with form state (get or create the field signal)
     let field_signal = state.update_untracked(|s| s.get_or_create_field(name));
-
-    // Create reactive value signal for this field
-    let value = Signal::derive({
-        let field_signal = field_signal.clone();
-        move || field_signal.value.get()
-    });
-
-    // Get the write signal directly from the field signal
-    let set_value = field_signal.value.write_only();
 
     // Set up an effect to handle reactive validation when value changes
     // This enables immediate validation feedback as users type
@@ -136,7 +127,7 @@ where
 
     // Pass value, setter, and state to children
     // This enables the `let(value, set_value, state)` syntax
-    children(value, set_value, state)
+    children(field_signal.value, state)
 }
 
 /// GetField component that only reads a field value from the parent form

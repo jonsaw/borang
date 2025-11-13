@@ -53,13 +53,13 @@ fn App() -> impl IntoView {
     view! {
         <form on:submit=on_submit>
             <FormComponent form=form>
-                <Field form=form name="name" let(value, set_value, state)>
+                <Field form=form name="name" let(value, state)>
                     <label for="name">"Name"</label>
                     <input
                         id="name"
                         type="text"
                         placeholder="Jed Saw"
-                        bind:value=(value, set_value)
+                        bind:value=value
                         on:blur={
                             let state = state.clone();
                             move |_| (state.mark_touched)()
@@ -67,13 +67,13 @@ fn App() -> impl IntoView {
                     />
                 </Field>
 
-                <Field form=form name="email" let(value, set_value, state)>
+                <Field form=form name="email" let(value, state)>
                     <label for="email">"Email"</label>
                     <input
                         id="email"
                         type="email"
                         placeholder="jed@borang.com"
-                        bind:value=(value, set_value)
+                        bind:value=value
                         on:blur={
                             let state = state.clone();
                             move |_| (state.mark_touched)()
