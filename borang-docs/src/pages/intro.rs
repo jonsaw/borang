@@ -73,10 +73,10 @@ pub fn IntroPage() -> impl IntoView {
     #[component]
     fn MyForm() -> impl IntoView {
         let contact = ContactForm {
-            name: String::new(),
-            email: String::new(),
-            age: 0,
-            country: Country::Other,
+            name: String::from("Jed"),
+            email: String::from("jed@inspire.my"),
+            age: 25,
+            country: Country::Malaysia,
         };
 
         let form = Form::from(contact);
@@ -308,10 +308,10 @@ pub fn FieldError(
 fn ExampleForm() -> impl IntoView {
     let i18n = use_i18n();
     let contact = ContactForm {
-        name: String::new(),
-        email: String::new(),
-        age: 0,
-        country: Country::Other,
+        name: String::from("Jed"),
+        email: String::from("jed@inspire.my"),
+        age: 25,
+        country: Country::Malaysia,
     };
 
     let form = Form::from(contact);
@@ -367,7 +367,7 @@ fn ExampleForm() -> impl IntoView {
                         <input
                             id="email"
                             type="email"
-                            placeholder="jed@borang.com"
+                            placeholder="jed@inspire.my"
                             class="py-2 px-3 w-full rounded-md border focus:ring-2 focus:outline-none border-border bg-background focus:ring-primary"
                             class:border-red-500={
                                 let state = state.clone();
