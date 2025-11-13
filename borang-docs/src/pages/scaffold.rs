@@ -167,7 +167,7 @@ pub fn SidebarNav(#[prop(into, optional)] class: String) -> impl IntoView {
                 <li class="md:hidden">
                     <a
                         class="block flex py-1 text-sm transition text-foreground-600 hover:text-foreground-900"
-                        href="https://docs.rs/pane-resizer/latest/pane_resizer/"
+                        href="https://docs.rs/borang/latest/borang/"
                     >
                         "Documentation"
                     </a>
@@ -175,7 +175,7 @@ pub fn SidebarNav(#[prop(into, optional)] class: String) -> impl IntoView {
                 <li class="md:hidden">
                     <a
                         class="block flex py-1 text-sm transition text-foreground-600 hover:text-foreground-900"
-                        href="https://github.com/jonsaw/pane-resizer"
+                        href="https://github.com/jonsaw/borang"
                     >
                         "Github"
                     </a>
@@ -183,7 +183,7 @@ pub fn SidebarNav(#[prop(into, optional)] class: String) -> impl IntoView {
                 <li class="md:hidden">
                     <a
                         class="block flex py-1 text-sm transition text-foreground-600 hover:text-foreground-900"
-                        href="https://github.com/jonsaw/pane-resizer/issues"
+                        href="https://github.com/jonsaw/borang/issues"
                     >
                         "Report an issue"
                     </a>
