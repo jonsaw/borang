@@ -37,6 +37,17 @@ impl<T: FormValidation + Default + Clone + Send + Sync + 'static> FieldState<T> 
     pub fn get_error(&self) -> Option<ValidationError> {
         self.err.get()
     }
+
+    /// Get the RwSignal for this field's value
+    pub fn value(&self) -> RwSignal<String> {
+        self.form.state_signal().with_untracked(|state| {
+            state
+                .fields
+                .get(self.field_name)
+                .map(|field| field.value)
+                .unwrap_or_else(|| RwSignal::new(String::new()))
+        })
+    }
 }
 
 /// Field component that binds to a specific field in the parent form
@@ -76,7 +87,7 @@ pub fn Field<T, F, IV>(
 ) -> impl IntoView
 where
     T: FormValidation + Default + Clone + Send + Sync + 'static,
-    F: Fn(RwSignal<String>, FieldState<T>) -> IV + 'static,
+    F: Fn(FieldState<T>) -> IV + 'static,
     IV: IntoView,
 {
     let state = form.state_signal();
@@ -128,9 +139,9 @@ where
         form,
     };
 
-    // Pass value, setter, and state to children
-    // This enables the `let(value, set_value, state)` syntax
-    children(field_signal.value, field_state)
+    // Pass state to children
+    // This enables the `let(state)` syntax
+    children(field_state)
 }
 
 /// GetField component that only reads a field value from the parent form
