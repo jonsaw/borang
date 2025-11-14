@@ -1,6 +1,6 @@
 use borang::{
-    Field, FieldState, Form, FormComponent, FormComponentState, FromFieldValue, GetField,
-    Validation, ValidationError,
+    Field, FieldState, Form, FormComponent, FormComponentState, FromFieldValue, GetField, Input,
+    Select, Validation, ValidationError,
 };
 use leptos::prelude::*;
 
@@ -14,7 +14,7 @@ use crate::utils::validation_i18n::translate_validation_error;
 pub fn IntroPage() -> impl IntoView {
     let i18n = use_i18n();
     let example_code = r#"
-    use borang::{Field, Form, FormComponent, FormValidation, FromFieldValue, ValidationError};
+    use borang::{Field, Form, FormComponent, FormValidation, FromFieldValue, Input, Select, ValidationError};
     use leptos::prelude::*;
 
     #[derive(Clone, Debug)]
@@ -97,14 +97,13 @@ pub fn IntroPage() -> impl IntoView {
         view! {
             <form on:submit=on_submit>
                 <FormComponent form=form let:form_state>
-                    <Field form=form name="name" let(value, field_state)>
+                    <Field form=form name="name" let:field_state>
                         <label for="name">"Name"</label>
-                        <input
-                            id="name"
-                            type="text"
-                            placeholder="Jed Saw"
-                            bind:value=value
-                            on:blur=move |_| field_state.mark_touched()
+                        <Input
+                            state=field_state
+                            attr:id="name"
+                            attr:type="text"
+                            attr:placeholder="Jed Saw"
                         />
                         <Show when=move || field_state.has_error()>
                             <span class="error">
@@ -113,14 +112,13 @@ pub fn IntroPage() -> impl IntoView {
                         </Show>
                     </Field>
 
-                    <Field form=form name="email" let(value, field_state)>
+                    <Field form=form name="email" let:field_state>
                         <label for="email">"Email"</label>
-                        <input
-                            id="email"
-                            type="email"
-                            placeholder="jed@borang.com"
-                            bind:value=value
-                            on:blur=move |_| field_state.mark_touched()
+                        <Input
+                            state=field_state
+                            attr:id="email"
+                            attr:type="email"
+                            attr:placeholder="jed@borang.com"
                         />
                         <Show when=move || field_state.has_error()>
                             <span class="error">
@@ -129,14 +127,13 @@ pub fn IntroPage() -> impl IntoView {
                         </Show>
                     </Field>
 
-                    <Field form=form name="age" let(value, field_state)>
+                    <Field form=form name="age" let:field_state>
                         <label for="age">"Age"</label>
-                        <input
-                            id="age"
-                            type="number"
-                            placeholder="18"
-                            bind:value=value
-                            on:blur=move |_| field_state.mark_touched()
+                        <Input
+                            state=field_state
+                            attr:id="age"
+                            attr:type="number"
+                            attr:placeholder="18"
                         />
                         <Show when=move || field_state.has_error()>
                             <span class="error">
@@ -145,18 +142,14 @@ pub fn IntroPage() -> impl IntoView {
                         </Show>
                     </Field>
 
-                    <Field form=form name="country" let(value, field_state)>
+                    <Field form=form name="country" let:field_state>
                         <label for="country">"Country"</label>
-                        <select
-                            id="country"
-                            bind:value=value
-                            on:blur=move |_| field_state.mark_touched()
-                        >
+                        <Select state=field_state attr:id="country">
                             <option value="Malaysia">"Malaysia"</option>
                             <option value="Australia">"Australia"</option>
                             <option value="England">"England"</option>
                             <option value="Other">"Other"</option>
-                        </select>
+                        </Select>
                         <Show when=move || field_state.has_error()>
                             <span class="error">
                                 {move || { field_state.get_error().map(|e| e.message().to_string()) }}
@@ -293,19 +286,18 @@ fn ExampleForm() -> impl IntoView {
     view! {
         <form on:submit=on_submit>
             <FormComponent form=form let(form_state: FormComponentState)>
-                <Field form=form name="name" let(value, field_state)>
+                <Field form=form name="name" let:field_state>
                     <div class="mb-4">
                         <label for="name" class="block mb-2 text-sm font-medium">
                             {t!(i18n, name)}
                         </label>
-                        <input
-                            id="name"
-                            type="text"
-                            placeholder="Jed Saw"
+                        <Input
+                            state=field_state
+                            attr:id="name"
+                            attr:r#type="text"
+                            attr:placeholder="Jed Saw"
                             class="py-2 px-3 w-full rounded-md border focus:ring-2 focus:outline-none border-border bg-background focus:ring-primary"
                             class:border-red-500=move || field_state.has_error()
-                            bind:value=value
-                            on:blur=move |_| field_state.mark_touched()
                         />
                         <FieldError
                             state=field_state
@@ -314,19 +306,18 @@ fn ExampleForm() -> impl IntoView {
                     </div>
                 </Field>
 
-                <Field form=form name="email" let(value, field_state)>
+                <Field form=form name="email" let:field_state>
                     <div class="mb-4">
                         <label for="email" class="block mb-2 text-sm font-medium">
                             {t!(i18n, email)}
                         </label>
-                        <input
-                            id="email"
-                            type="email"
-                            placeholder="jed@inspire.my"
+                        <Input
+                            state=field_state
                             class="py-2 px-3 w-full rounded-md border focus:ring-2 focus:outline-none border-border bg-background focus:ring-primary"
                             class:border-red-500=move || field_state.has_error()
-                            bind:value=value
-                            on:blur=move |_| field_state.mark_touched()
+                            attr:id="email"
+                            attr:r#type="email"
+                            attr:placeholder="jed@inspire.my"
                         />
                         <FieldError
                             state=field_state
@@ -335,19 +326,18 @@ fn ExampleForm() -> impl IntoView {
                     </div>
                 </Field>
 
-                <Field form=form name="age" let(value, field_state)>
+                <Field form=form name="age" let:field_state>
                     <div class="mb-4">
                         <label for="age" class="block mb-2 text-sm font-medium">
                             {t!(i18n, age)}
                         </label>
-                        <input
-                            id="age"
-                            type="number"
-                            placeholder="18"
+                        <Input
+                            state=field_state
                             class="py-2 px-3 w-full rounded-md border focus:ring-2 focus:outline-none border-border bg-background focus:ring-primary"
                             class:border-red-500=move || field_state.has_error()
-                            bind:value=value
-                            on:blur=move |_| field_state.mark_touched()
+                            attr:id="age"
+                            attr:r#type="number"
+                            attr:placeholder="18"
                         />
                         <FieldError
                             state=field_state
@@ -356,23 +346,22 @@ fn ExampleForm() -> impl IntoView {
                     </div>
                 </Field>
 
-                <Field form=form name="country" let(value, field_state)>
+                <Field form=form name="country" let:field_state>
                     <div class="mb-6">
                         <label for="country" class="block mb-2 text-sm font-medium">
                             {t!(i18n, country)}
                         </label>
-                        <select
-                            id="country"
+                        <Select
+                            state=field_state
+                            attr:id="country"
                             class="py-2 px-3 w-full rounded-md border focus:ring-2 focus:outline-none border-border bg-background focus:ring-primary"
                             class:border-red-500=move || field_state.has_error()
-                            bind:value=value
-                            on:blur=move |_| field_state.mark_touched()
                         >
                             <option value="Malaysia">"Malaysia"</option>
                             <option value="Australia">"Australia"</option>
                             <option value="England">"England"</option>
                             <option value="Other">"Other"</option>
-                        </select>
+                        </Select>
                         <FieldError
                             state=field_state
                             field_name=Signal::derive(move || t_string!(i18n, country))

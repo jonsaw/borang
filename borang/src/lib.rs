@@ -2,13 +2,17 @@
 
 pub mod field;
 pub mod form;
+pub mod input;
 pub mod macros;
+pub mod select;
 pub mod validation;
 
 // Re-export core types
 pub use field::{Field, FieldState, GetField};
 pub use form::{Form, FormComponent, FormComponentState, FormState};
+pub use input::Input;
 pub use macros::FormValidation as Validation;
+pub use select::Select;
 pub use validation::{
     ErrorKind, FieldSignal, FormValidation, FromFieldValue, ValidationError, ValidationResult,
 };

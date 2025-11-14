@@ -17,7 +17,7 @@ See [demo](https://borang-leptos.vercel.app).
 Simple example:
 
 ```rust
-use borang::{Form, FormComponent, Field, Validation};
+use borang::{Form, FormComponent, Field, Input, Validation};
 use leptos::prelude::*;
 
 #[derive(Validation, Default, Clone)]
@@ -52,25 +52,23 @@ fn App() -> impl IntoView {
     view! {
         <form on:submit=on_submit>
             <FormComponent form=form>
-                <Field form=form name="name" let(value, field_state)>
+                <Field form=form name="name" let(_value, field_state)>
                     <label for="name">"Name"</label>
-                    <input
-                        id="name"
-                        type="text"
-                        placeholder="Jed Saw"
-                        bind:value=value
-                        on:blur=move |_| field_state.mark_touched()
+                    <Input
+                        state=field_state
+                        attr:id="name"
+                        attr:type="text"
+                        attr:placeholder="Jed Saw"
                     />
                 </Field>
 
-                <Field form=form name="email" let(value, field_state)>
+                <Field form=form name="email" let(_value, field_state)>
                     <label for="email">"Email"</label>
-                    <input
-                        id="email"
-                        type="email"
-                        placeholder="jed@borang.com"
-                        bind:value=value
-                        on:blur=move |_| field_state.mark_touched()
+                    <Input
+                        state=field_state
+                        attr:id="email"
+                        attr:type="email"
+                        attr:placeholder="jed@borang.com"
                     />
                 </Field>
 
