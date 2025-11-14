@@ -39,7 +39,6 @@ fn App() -> impl IntoView {
     let form = Form::from(contact);
 
     let on_submit = {
-        let form = form.clone();
         move |event: leptos::web_sys::SubmitEvent| {
             event.prevent_default();
             if form.validate() {
@@ -53,31 +52,25 @@ fn App() -> impl IntoView {
     view! {
         <form on:submit=on_submit>
             <FormComponent form=form>
-                <Field form=form name="name" let(value, state)>
+                <Field form=form name="name" let(value, field_state)>
                     <label for="name">"Name"</label>
                     <input
                         id="name"
                         type="text"
                         placeholder="Jed Saw"
                         bind:value=value
-                        on:blur={
-                            let state = state.clone();
-                            move |_| (state.mark_touched)()
-                        }
+                        on:blur=move |_| field_state.mark_touched()
                     />
                 </Field>
 
-                <Field form=form name="email" let(value, state)>
+                <Field form=form name="email" let(value, field_state)>
                     <label for="email">"Email"</label>
                     <input
                         id="email"
                         type="email"
                         placeholder="jed@borang.com"
                         bind:value=value
-                        on:blur={
-                            let state = state.clone();
-                            move |_| (state.mark_touched)()
-                        }
+                        on:blur=move |_| field_state.mark_touched()
                     />
                 </Field>
 

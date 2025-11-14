@@ -1,23 +1,35 @@
 use leptos::prelude::*;
-use std::sync::Arc;
 
 use super::form::Form;
 use super::validation::{FormValidation, ValidationError};
 
-/// State object provided by Field component containing error, dirty, touched signals and mark_touched callback
+/// State object provided by Field component containing error, dirty, touched signals and form reference
 #[derive(Clone)]
-pub struct FieldState {
+pub struct FieldState<T: FormValidation> {
     /// Current validation error for this field
     pub err: Signal<Option<ValidationError>>,
     /// True if field value differs from initial value
     pub dirty: Signal<bool>,
     /// True if field has been marked as touched
     pub touched: Signal<bool>,
-    /// Callback to mark field as touched (typically called on blur)
-    pub mark_touched: Arc<dyn Fn() + Send + Sync>,
+    /// The name of this field
+    pub field_name: &'static str,
+    /// Reference to the parent form
+    pub form: Form<T>,
 }
 
-impl FieldState {
+// Manually implement Copy for FieldState<T> regardless of whether T is Copy
+// This is safe because FieldState only contains Copy types (Signal, &'static str, and Form<T> which is Copy)
+impl<T: FormValidation + Clone> Copy for FieldState<T> {}
+
+impl<T: FormValidation + Default + Clone + Send + Sync + 'static> FieldState<T> {
+    /// Mark this field as touched (typically called on blur)
+    pub fn mark_touched(&self) {
+        self.form.state_signal().update(|s| {
+            s.touched.insert(self.field_name.to_string(), true);
+        });
+    }
+
     pub fn has_error(&self) -> bool {
         self.err.get().is_some()
     }
@@ -42,7 +54,7 @@ impl FieldState {
 ///         <input
 ///             type="email"
 ///             bind:value=(value, set_value)
-///             on:blur=move |_| (state.mark_touched)()
+///             on:blur=move |_| state.mark_touched()
 ///         />
 ///         <Show when=move || state.err.get().is_some()>
 ///             <span class="error">{move || state.err.get().map(|e| e.message().to_string())}</span>
@@ -64,7 +76,7 @@ pub fn Field<T, F, IV>(
 ) -> impl IntoView
 where
     T: FormValidation + Default + Clone + Send + Sync + 'static,
-    F: Fn(RwSignal<String>, FieldState) -> IV + 'static,
+    F: Fn(RwSignal<String>, FieldState<T>) -> IV + 'static,
     IV: IntoView,
 {
     let state = form.state_signal();
@@ -89,16 +101,6 @@ where
         });
     }
 
-    // Create mark_touched callback
-    let mark_touched = {
-        let name = name.to_string();
-        Arc::new(move || {
-            state.update(|s| {
-                s.touched.insert(name.clone(), true);
-            });
-        }) as Arc<dyn Fn() + Send + Sync>
-    };
-
     // Create reactive error signal for this field
     let error = Signal::derive({
         let name = name.to_string();
@@ -118,16 +120,17 @@ where
     });
 
     // Create FieldState object
-    let state = FieldState {
+    let field_state = FieldState {
         err: error,
         dirty,
         touched,
-        mark_touched,
+        field_name: name,
+        form,
     };
 
     // Pass value, setter, and state to children
     // This enables the `let(value, set_value, state)` syntax
-    children(field_signal.value, state)
+    children(field_signal.value, field_state)
 }
 
 /// GetField component that only reads a field value from the parent form

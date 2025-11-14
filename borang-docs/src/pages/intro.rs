@@ -97,105 +97,69 @@ pub fn IntroPage() -> impl IntoView {
         view! {
             <form on:submit=on_submit>
                 <FormComponent form=form let:form_state>
-                    <Field form=form name="name" let(value, state)>
+                    <Field form=form name="name" let(value, field_state)>
                         <label for="name">"Name"</label>
                         <input
                             id="name"
                             type="text"
                             placeholder="Jed Saw"
                             bind:value=value
-                            on:blur={
-                                let mark_touched = state.mark_touched.clone();
-                                move |_| mark_touched()
-                            }
+                            on:blur=move |_| field_state.mark_touched()
                         />
-                        <Show when={
-                            let state = state.clone();
-                            move || state.has_error()
-                        }>
+                        <Show when=move || field_state.has_error()>
                             <span class="error">
-                                {
-                                    let state = state.clone();
-                                    move || { state.get_error().map(|e| e.message().to_string()) }
-                                }
+                                {move || { field_state.get_error().map(|e| e.message().to_string()) }}
                             </span>
                         </Show>
                     </Field>
 
-                    <Field form=form name="email" let(value, state)>
+                    <Field form=form name="email" let(value, field_state)>
                         <label for="email">"Email"</label>
                         <input
                             id="email"
                             type="email"
                             placeholder="jed@borang.com"
                             bind:value=value
-                            on:blur={
-                                let mark_touched = state.mark_touched.clone();
-                                move |_| mark_touched()
-                            }
+                            on:blur=move |_| field_state.mark_touched()
                         />
-                        <Show when={
-                            let state = state.clone();
-                            move || state.has_error()
-                        }>
+                        <Show when=move || field_state.has_error()>
                             <span class="error">
-                                {
-                                    let state = state.clone();
-                                    move || { state.get_error().map(|e| e.message().to_string()) }
-                                }
+                                {move || { field_state.get_error().map(|e| e.message().to_string()) }}
                             </span>
                         </Show>
                     </Field>
 
-                    <Field form=form name="age" let(value, state)>
+                    <Field form=form name="age" let(value, field_state)>
                         <label for="age">"Age"</label>
                         <input
                             id="age"
                             type="number"
                             placeholder="18"
                             bind:value=value
-                            on:blur={
-                                let mark_touched = state.mark_touched.clone();
-                                move |_| mark_touched()
-                            }
+                            on:blur=move |_| field_state.mark_touched()
                         />
-                        <Show when={
-                            let state = state.clone();
-                            move || state.has_error()
-                        }>
+                        <Show when=move || field_state.has_error()>
                             <span class="error">
-                                {
-                                    let state = state.clone();
-                                    move || { state.get_error().map(|e| e.message().to_string()) }
-                                }
+                                {move || { field_state.get_error().map(|e| e.message().to_string()) }}
                             </span>
                         </Show>
                     </Field>
 
-                    <Field form=form name="country" let(value, state)>
+                    <Field form=form name="country" let(value, field_state)>
                         <label for="country">"Country"</label>
                         <select
                             id="country"
                             bind:value=value
-                            on:blur={
-                                let mark_touched = state.mark_touched.clone();
-                                move |_| mark_touched()
-                            }
+                            on:blur=move |_| field_state.mark_touched()
                         >
                             <option value="Malaysia">"Malaysia"</option>
                             <option value="Australia">"Australia"</option>
                             <option value="England">"England"</option>
                             <option value="Other">"Other"</option>
                         </select>
-                        <Show when={
-                            let state = state.clone();
-                            move || state.has_error()
-                        }>
+                        <Show when=move || field_state.has_error()>
                             <span class="error">
-                                {
-                                    let state = state.clone();
-                                    move || { state.get_error().map(|e| e.message().to_string()) }
-                                }
+                                {move || { field_state.get_error().map(|e| e.message().to_string()) }}
                             </span>
                         </Show>
                     </Field>
@@ -279,27 +243,24 @@ struct ContactForm {
 }
 
 #[component]
-pub fn FieldError(
-    state: FieldState,
+pub fn FieldError<T>(
+    state: FieldState<T>,
     #[prop(into)] field_name: Signal<&'static str>,
-) -> impl IntoView {
+) -> impl IntoView
+where
+    T: borang::validation::FormValidation + Default + Clone + Send + Sync + 'static,
+{
     let i18n = use_i18n();
 
-    let error_message = {
-        let state = state.clone();
-        move || {
-            state
-                .get_error()
-                .map(|e| translate_validation_error(i18n, &e, field_name.get()))
-        }
-    };
+    let error_message = Signal::derive(move || {
+        state
+            .get_error()
+            .map(|e| translate_validation_error(i18n, &e, field_name.get()))
+    });
 
     view! {
-        <Show when={
-            let state = state.clone();
-            move || state.has_error()
-        }>
-            <span class="block mt-1 text-sm text-red-500">{error_message()}</span>
+        <Show when=move || state.has_error()>
+            <span class="block mt-1 text-sm text-red-500">{error_message}</span>
         </Show>
     }
 }
@@ -332,7 +293,7 @@ fn ExampleForm() -> impl IntoView {
     view! {
         <form on:submit=on_submit>
             <FormComponent form=form let(form_state: FormComponentState)>
-                <Field form=form name="name" let(value, state)>
+                <Field form=form name="name" let(value, field_state)>
                     <div class="mb-4">
                         <label for="name" class="block mb-2 text-sm font-medium">
                             {t!(i18n, name)}
@@ -342,24 +303,18 @@ fn ExampleForm() -> impl IntoView {
                             type="text"
                             placeholder="Jed Saw"
                             class="py-2 px-3 w-full rounded-md border focus:ring-2 focus:outline-none border-border bg-background focus:ring-primary"
-                            class:border-red-500={
-                                let state = state.clone();
-                                move || state.has_error()
-                            }
+                            class:border-red-500=move || field_state.has_error()
                             bind:value=value
-                            on:blur={
-                                let state = state.clone();
-                                move |_| (state.mark_touched)()
-                            }
+                            on:blur=move |_| field_state.mark_touched()
                         />
                         <FieldError
-                            state=state
+                            state=field_state
                             field_name=Signal::derive(move || t_string!(i18n, name))
                         />
                     </div>
                 </Field>
 
-                <Field form=form name="email" let(value, state)>
+                <Field form=form name="email" let(value, field_state)>
                     <div class="mb-4">
                         <label for="email" class="block mb-2 text-sm font-medium">
                             {t!(i18n, email)}
@@ -369,24 +324,18 @@ fn ExampleForm() -> impl IntoView {
                             type="email"
                             placeholder="jed@inspire.my"
                             class="py-2 px-3 w-full rounded-md border focus:ring-2 focus:outline-none border-border bg-background focus:ring-primary"
-                            class:border-red-500={
-                                let state = state.clone();
-                                move || state.has_error()
-                            }
+                            class:border-red-500=move || field_state.has_error()
                             bind:value=value
-                            on:blur={
-                                let state = state.clone();
-                                move |_| (state.mark_touched)()
-                            }
+                            on:blur=move |_| field_state.mark_touched()
                         />
                         <FieldError
-                            state=state
+                            state=field_state
                             field_name=Signal::derive(move || t_string!(i18n, email))
                         />
                     </div>
                 </Field>
 
-                <Field form=form name="age" let(value, state)>
+                <Field form=form name="age" let(value, field_state)>
                     <div class="mb-4">
                         <label for="age" class="block mb-2 text-sm font-medium">
                             {t!(i18n, age)}
@@ -396,40 +345,28 @@ fn ExampleForm() -> impl IntoView {
                             type="number"
                             placeholder="18"
                             class="py-2 px-3 w-full rounded-md border focus:ring-2 focus:outline-none border-border bg-background focus:ring-primary"
-                            class:border-red-500={
-                                let state = state.clone();
-                                move || state.has_error()
-                            }
+                            class:border-red-500=move || field_state.has_error()
                             bind:value=value
-                            on:blur={
-                                let state = state.clone();
-                                move |_| (state.mark_touched)()
-                            }
+                            on:blur=move |_| field_state.mark_touched()
                         />
                         <FieldError
-                            state=state
+                            state=field_state
                             field_name=Signal::derive(move || t_string!(i18n, age))
                         />
                     </div>
                 </Field>
 
-                <Field form=form name="country" let(value, state)>
-                    <div class="mb-4">
+                <Field form=form name="country" let(value, field_state)>
+                    <div class="mb-6">
                         <label for="country" class="block mb-2 text-sm font-medium">
                             {t!(i18n, country)}
                         </label>
                         <select
                             id="country"
                             class="py-2 px-3 w-full rounded-md border focus:ring-2 focus:outline-none border-border bg-background focus:ring-primary"
-                            class:border-red-500={
-                                let state = state.clone();
-                                move || state.has_error()
-                            }
+                            class:border-red-500=move || field_state.has_error()
                             bind:value=value
-                            on:blur={
-                                let state = state.clone();
-                                move |_| (state.mark_touched)()
-                            }
+                            on:blur=move |_| field_state.mark_touched()
                         >
                             <option value="Malaysia">"Malaysia"</option>
                             <option value="Australia">"Australia"</option>
@@ -437,7 +374,7 @@ fn ExampleForm() -> impl IntoView {
                             <option value="Other">"Other"</option>
                         </select>
                         <FieldError
-                            state=state
+                            state=field_state
                             field_name=Signal::derive(move || t_string!(i18n, country))
                         />
                     </div>
